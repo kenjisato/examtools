@@ -1,0 +1,14 @@
+#listview li {
+  line-height: 150%;
+}
+
+#Data {float: left; }
+
+#ExamResults {}
+#Evaluation {}
+
+#ExamSheet { float: right; }
+
+#ExamSheet img {
+  width: 800px;
+}

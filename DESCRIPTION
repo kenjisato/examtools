@@ -1,0 +1,18 @@
+Package: examtools
+Type: Package
+Title: Helper Tools for exams Package
+Version: 0.1.0
+Author: Kenji Sato
+Maintainer: Kenji Sato <mail@kenjisato.jp>
+Description: This package collects tools to enchance exams package.
+    Used mainly for checking the results of written NOPS exams.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    servr,
+    zip,
+    exams,
+    base64enc,
+    utils
+RoxygenNote: 6.1.1
