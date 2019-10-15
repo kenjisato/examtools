@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="{{language}}">
+<head>
+<meta charset="{{encoding}}">
+<title>{{registration}} - {{LANG_ExamResults}}</title>
+
+<style>
+  table { border-collapse: collapse; }
+  #Data {float: left; }
+  #ExamResults td {
+    padding: 2px;
+  }
+  #Evaluation td {
+    border: solid 1px black;
+    text-align: right;
+    vertical-align: top;
+    padding: 2px;
+  }
+  #ExamSheet { float: left; }
+  #ExamSheet img { width: 600px; }
+
+  .full { background-color: #AEF595; }
+  .positive { background-color: #FFDC87; }
+  .neutral { background-color: #E2E2E2;}
+  .negative { background-color: #FFC3DA;}
+</style>
+
+{{{head}}}
+
+</head>
+
+<body>
+
+<section>
+
+<div id="Data">
+<div id="ExamResults">
+  <h3>{{LANG_ExamResults}}</h3>
+  <table>
+  <tr>
+    <td>{{LANG_Name}}:</td><td>{{name}}</td>
+  </tr>
+  <tr>
+    <td>{{LANG_RegistrationNumber}}:</td><td>{{registration}}</td>
+  </tr>
+  <tr>
+    <td>{{LANG_DocumentID}}:</td><td>{{exam}}</td>
+  </tr>
+  {{#has_mark}}
+  <tr>
+    <td>{{LANG_Mark}}</td><td>{{mark}}</td>
+  </tr>
+  {{/has_mark}}
+  <tr>
+    <td>{{LANG_Points}}:</td><td>{{points}}</td>
+  </tr>
+  </table>
+</div>
+
+<div id="Evaluation">
+  <h3>{{LANG_Evaluation}}</h3>
+  <table id = "evaluation">
+  <tr><td>{{LANG_Question}}</td><td>{{LANG_Points}}</td><td>{{LANG_GivenAnswer}}</td><td>{{LANG_CorrectAnswer}}</td></tr>
+
+  {{#results}}
+    <tr class="{{check}}">
+      <td>{{question}}</td>
+      <td>{{points}}</td>
+      <td>{{answer}}</td>
+      <td>{{solution}}</td>
+    </tr>
+  {{/results}}
+  </table>
+</div>
+</div>
+
+<div id="ExamSheet">
+
+  {{{image1}}}
+  {{{image2}}}
+
+</div>
+</section>
+
+</body>
+</html>

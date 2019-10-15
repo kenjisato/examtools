@@ -4,7 +4,7 @@ Title: Helper Tools for exams Package
 Version: 0.1.0
 Author: Kenji Sato
 Maintainer: Kenji Sato <mail@kenjisato.jp>
-Description: This package collects tools to enchance exams package.
+Description: This package collects tools to extend exams package.
     Used mainly for checking the results of written NOPS exams.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -14,5 +14,9 @@ Imports:
     zip,
     exams,
     base64enc,
-    utils
+    utils,
+    later,
+    whisker,
+    shiny,
+    miniUI
 RoxygenNote: 6.1.1

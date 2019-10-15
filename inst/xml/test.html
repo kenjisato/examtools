@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="{{language}}">
+<head>
+<meta charset="{{encoding}}">
+<title>{{registration}} - {{LANG_ExamResults}}</title>
+
+<style>
+  #Data {float: left; }
+  #ExamResults {}
+  #Evaluation {}
+  #ExamSheet { float: right; }
+  #ExamSheet img { width: 600px; }
+</style>
+
+</head>
+
+<body>
+<header>
+  <h1>TEST</h1>
+</header>
+
+<section>
+   <table>
+     <th>
+       {{#tabHead}}<td>{{col}}</td>{{/tabHead}}
+     </th>
+     {{#dat}}
+     <tr>
+       <td>{{}}</td>
+     </tr>
+     {{/data}}
+   </table>
+</section>
+
+</body>
+</html>
