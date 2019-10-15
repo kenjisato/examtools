@@ -1,16 +1,3 @@
-merge.moodle <- function(nops, worksheet) {
-  worksheet_names <- names(worksheet)
-
-  # Remove prefix from submission ID column -> sid
-  worksheet$sid <- sub("^[^0-9]*([0-9]+)$", "\\1", worksheet[[1]])
-
-  # Pick registration numbers from Full name column.
-  worksheet$registration <- sub(paste0(".*([0-9]{", reglength, "}).*"),
-                                "\\1", worksheet[[2]])
-
-  merge(worksheet, nops_eval, by = "registration", sort = FALSE)
-}
-
 
 
 #' Convert structure of nops_eval.zip for Moodle
@@ -28,9 +15,9 @@ merge.moodle <- function(nops, worksheet) {
 #' @return
 #' @export
 #'
-#' @examples
+#' @importFrom utils read.csv read.table unzip write.csv
 rewrite_for_moodle <- function(nops_zip,
-                               worksheet,
+                               worksheet_csv,
                                nops_csv = NULL,
                                reglength = 7,
                                suffix = "-moodle",
