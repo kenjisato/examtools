@@ -1,21 +1,29 @@
 
-insert_imports_shims <- function(){
-  utils::assignInNamespace("nops_eval_write", shim_nops_eval_write,
-                           ns="exams", pos="package:exams")
-}
-
+#' @title Customized nops_eval_write
+#'
+#' @param results
+#' @param file
+#' @param html
+#' @param encoding
+#' @param language
+#' @param converter
+#' @param template HTML template for output files.
+#' @param col
+#'
+#' @export
+#'
 #' @importFrom grDevices hcl
 #' @importFrom utils read.csv2 zip
 #' @importFrom whisker whisker.render rowSplit
-shim_nops_eval_write <- function(results = "nops_eval.csv",
-                                 file = "nops_eval.zip",
-                                 html = "exam_eval.html",
-                                 encoding = "UTF-8",
-                                 language = "en",
-                                 converter = NULL,
-                                 template = NULL,
-                                 col = NULL
-                                 ) {
+nops_eval_write_custom <- function(
+  results = "nops_eval.csv",
+  file = "nops_eval.zip",
+  html = "exam_eval.html",
+  encoding = "UTF-8",
+  language = "en",
+  converter = NULL,
+  template = NULL,
+  col = NULL) {
 
   stopifnot(requireNamespace("base64enc"))
 
