@@ -1,12 +1,31 @@
+merge_moodle_opu <- function(ev, ws){
+  # Remove prefix from submission ID column -> sid
+  ws_names <- names(ws)
+  ws$sid <- sub("^[^0-9]*([0-9]+)$", "\\1", ws[[1]])
+
+  # Pick registration numbers from Full name column.
+  ws$registration <- sub(paste0(".*([0-9]{", reglength, "}).*"),
+                         "\\1", worksheet[[2]])
+
+  merged_df <- merge(ws, ev, by = "registration", sort = FALSE)
+
+  merged_df[["Grade"]] <- merged_df[["points"]]
+  merged_df$dir_name <- sprintf(pattern,
+                                merged_df[[ws_names[[2]]]],
+                                merged_df$sid)
+}
 
 
-#' Convert structure of nops_eval.zip for Moodle
-#' worksheet will also be updated.
+merge_moodle <- function(ev, ws) {
+  # default merge function
+}
+
+#' Convert structure of nops_eval.zip for bulk uploading to Moodle
+#' Grading worksheet will also be produced.
 #'
 #' @param nops_zip
 #' @param worksheet_csv
 #' @param nops_csv
-#' @param worksheet_points_col
 #' @param reglength
 #' @param pattern
 #' @param suffix
@@ -21,7 +40,7 @@ rewrite_for_moodle <- function(nops_zip,
                                nops_csv = NULL,
                                reglength = 7,
                                suffix = "-moodle",
-                               worksheet_points_col = "Grade",
+                               merge = merge_moodle_opu,
                                pattern = "%s_%s_assignsubmission_file_",
                                quote = TRUE) {
 
@@ -35,21 +54,7 @@ rewrite_for_moodle <- function(nops_zip,
   worksheet <- read.csv(worksheet_csv, fileEncoding = "UTF-8",
                         stringsAsFactors = FALSE, check.names = FALSE)
   worksheet_names <- names(worksheet)
-
-  # Remove prefix from submission ID column -> sid
-  worksheet$sid <- sub("^[^0-9]*([0-9]+)$", "\\1", worksheet[[1]])
-
-  # Pick registration numbers from Full name column.
-  worksheet$registration <- sub(paste0(".*([0-9]{", reglength, "}).*"),
-                                "\\1", worksheet[[2]])
-
-  merged_df <- merge(worksheet, nops_eval, by = "registration",
-                     sort = FALSE)
-
-  merged_df[[worksheet_points_col]] <- merged_df[["points"]]
-  merged_df$dir_name <- sprintf(pattern,
-                                merged_df[[worksheet_names[[2]]]],
-                                merged_df$sid)
+  merged_df <- merge(nops_eval, worksheet)
 
   # Write out updated Grading Worksheet
   write.csv(merged_df[worksheet_names],
