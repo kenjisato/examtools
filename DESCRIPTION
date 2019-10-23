@@ -12,7 +12,7 @@ LazyData: true
 Imports: 
     servr,
     zip,
-    exams,
+    exams (>= 2.3-5),
     base64enc,
     utils,
     later,
