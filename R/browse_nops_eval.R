@@ -1,17 +1,16 @@
 #' Launches a shiny gadget for browsing nops_eval.zip of written
 #' exams created with R/exams.
 #'
-#' @param file Path to nops_eval.zip or unzipped directory.
-#' @param width Width of dialogViewer
-#' @param height Height of dialogViewer
+#' @param file character. Path to nops_eval.zip or unzipped directory.
+#' @param width integer. Width of dialogViewer
+#' @param height integer. Height of dialogViewer
 #'
 #' @return
 #' @export
 #'
-#' @examples
 #' @import shiny
 #' @import miniUI
-nops_eval_browse <- function(file, width = 1000, height = 800){
+browse_nops_eval <- function(file, width = 1000, height = 800){
 
   temp_dir <- tempfile()
 
