@@ -8,7 +8,6 @@
 #' @param language character. Language as in \code{\link[exams]{nops_eval}}
 #' @param converter character. Converter as in \code{\link[exams]{nops_eval}}
 #' @param template character. HTML template for output files.
-#' @param col character. col as in \code{\link[exams]{nops_eval}}
 #'
 #' @export
 #'
@@ -22,8 +21,7 @@ nops_eval_write_custom <- function(
   encoding = "UTF-8",
   language = "en",
   converter = NULL,
-  template = NULL,
-  col = NULL) {
+  template = NULL) {
 
   stopifnot(requireNamespace("base64enc"))
 
