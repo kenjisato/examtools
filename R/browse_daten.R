@@ -13,8 +13,7 @@
 #' @import miniUI
 check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 45) {
   daten <- read.delim(file.path(dir, file),
-                      sep = " ", header = FALSE, colClasses = "character"
-  )
+                      sep = " ", header = FALSE, colClasses = "character")
   image.path <- file.path(dir, daten[[1]])
 
   COLNUM <- c(exam = 2, type = 4, registration = 6, info.end = 6)
@@ -119,6 +118,7 @@ check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 
 
     # Event handlers
     observeEvent(input$done, stopApp(daten))
+    observeEvent(input$cancel, stopApp(invisible()))
 
     for (id in c("registration", "exam", "type")) {
       local({
