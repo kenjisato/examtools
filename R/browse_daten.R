@@ -29,7 +29,9 @@ check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 
       type = "text/css",
       HTML("div[id^='prb.']>*{float: left; margin-left: 25px; height: 15px;} div[id^='prb.'] {height: 15px;}")
     ),
-    gadgetTitleBar(tools::file_path_as_absolute(dir)),
+    gadgetTitleBar(tools::file_path_as_absolute(dir),
+                   left = miniTitleBarButton("abort", "Abort", primary = TRUE),
+                   right = miniTitleBarButton("done", "Done", primary = TRUE)),
     miniTabstripPanel(
       miniTabPanel("Exam Sheet",
                    icon = icon("pencil-square"),
@@ -118,7 +120,7 @@ check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 
 
     # Event handlers
     observeEvent(input$done, stopApp(daten))
-    observeEvent(input$cancel, stopApp(invisible()))
+    observeEvent(input$abort, stopApp(invisible()))
 
     for (id in c("registration", "exam", "type")) {
       local({
