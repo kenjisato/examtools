@@ -6,6 +6,7 @@
 #' @param width integer. Width of the dialog viewer.
 #' @param height integer. Width of the dialog viewer.
 #' @param n integer. Number of problems.
+#' @export
 #'
 #' @importFrom utils read.delim
 #' @import shiny
