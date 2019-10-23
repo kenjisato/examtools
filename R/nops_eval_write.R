@@ -1,14 +1,14 @@
 
 #' @title Customized nops_eval_write
 #'
-#' @param results
-#' @param file
-#' @param html
-#' @param encoding
-#' @param language
-#' @param converter
-#' @param template HTML template for output files.
-#' @param col
+#' @param results character. Path to nops_eval.csv
+#' @param file character. Path to nops_eval.zip
+#' @param html character. html parameter as in \code{\link[exams]{nops_eval}}
+#' @param encoding character. Encoding as in \code{\link[exams]{nops_eval}}
+#' @param language character. Language as in \code{\link[exams]{nops_eval}}
+#' @param converter character. Converter as in \code{\link[exams]{nops_eval}}
+#' @param template character. HTML template for output files.
+#' @param col character. col as in \code{\link[exams]{nops_eval}}
 #'
 #' @export
 #'
@@ -57,7 +57,7 @@ nops_eval_write_custom <- function(
   if (language == "") {
     language <- system.file(file.path("nops", "en.dcf"), package = "exams")
   }
-  lang <- exams:::nops_language(language, converter = converter)
+  lang <- exams::nops_language(language, converter = converter)
   substr(lang$Points, 1L, 1L) <- toupper(substr(lang$Points, 1L, 1L))
   if (!is.null(lang$PointSum)) {
     lang$Points <- lang$PointSum
