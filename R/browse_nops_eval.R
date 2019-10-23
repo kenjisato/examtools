@@ -5,7 +5,7 @@
 #' @param width integer. Width of dialogViewer
 #' @param height integer. Height of dialogViewer
 #'
-#' @return
+#' @return data.frame that will be used to overwrite Data.txt
 #' @export
 #'
 #' @import shiny

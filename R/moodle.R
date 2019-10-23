@@ -22,22 +22,21 @@ merge_moodle <- function(ev, ws) {
 #' Convert structure of nops_eval.zip for bulk uploading to Moodle
 #' Grading worksheet will also be produced.
 #'
-#' @param nops_zip
-#' @param worksheet_csv
-#' @param nops_csv
-#' @param reglength
-#' @param pattern
-#' @param suffix
+#' @param nops_zip character. Path to nops_eval.zip, output of nops_eval()
+#' @param worksheet_csv character. Path to Moodle's grading worksheet.
+#' @param nops_csv character. Path to nops_eval.csv, output of nops_eval().
+#'                 If NULL, it is guessed from the argument to nop_zip.
+#' @param pattern character. Pattern for output directory names.
+#' @param suffix character. Suffix for output zip file.
 #' @param quote logical, passed to write.csv
 #'
-#' @return
+#' @return None. New zip file is created as a side effect.
 #' @export
 #'
 #' @importFrom utils read.csv read.table unzip write.csv
 rewrite_for_moodle <- function(nops_zip,
                                worksheet_csv,
                                nops_csv = NULL,
-                               reglength = 7,
                                suffix = "-moodle",
                                merge = merge_moodle_opu,
                                pattern = "%s_%s_assignsubmission_file_",
