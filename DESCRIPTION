@@ -18,5 +18,7 @@ Imports:
     later,
     whisker,
     shiny,
-    miniUI
+    miniUI,
+    DT,
+    png
 RoxygenNote: 6.1.1

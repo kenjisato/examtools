@@ -2,17 +2,17 @@
 % Please edit documentation in R/moodle.R
 \name{rewrite_for_moodle}
 \alias{rewrite_for_moodle}
-\title{Convert structure of nops_eval.zip for Moodle
-worksheet will also be updated.}
+\title{Convert structure of nops_eval.zip for bulk uploading to Moodle
+Grading worksheet will also be produced.}
 \usage{
 rewrite_for_moodle(nops_zip, worksheet_csv, nops_csv = NULL,
-  reglength = 7, suffix = "-moodle", worksheet_points_col = "Grade",
+  reglength = 7, suffix = "-moodle", merge = merge_moodle_opu,
   pattern = "\%s_\%s_assignsubmission_file_", quote = TRUE)
 }
 \arguments{
-\item{quote}{}
+\item{quote}{logical, passed to write.csv}
 }
 \description{
-Convert structure of nops_eval.zip for Moodle
-worksheet will also be updated.
+Convert structure of nops_eval.zip for bulk uploading to Moodle
+Grading worksheet will also be produced.
 }

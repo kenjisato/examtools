@@ -4,15 +4,14 @@ merge_moodle_opu <- function(ev, ws){
   ws$sid <- sub("^[^0-9]*([0-9]+)$", "\\1", ws[[1]])
 
   # Pick registration numbers from Full name column.
+  reglength <- 10
   ws$registration <- sub(paste0(".*([0-9]{", reglength, "}).*"),
-                         "\\1", worksheet[[2]])
+                         "\\1", ws[[2]])
 
   merged_df <- merge(ws, ev, by = "registration", sort = FALSE)
 
   merged_df[["Grade"]] <- merged_df[["points"]]
-  merged_df$dir_name <- sprintf(pattern,
-                                merged_df[[ws_names[[2]]]],
-                                merged_df$sid)
+  merged_df
 }
 
 
@@ -29,7 +28,7 @@ merge_moodle <- function(ev, ws) {
 #' @param reglength
 #' @param pattern
 #' @param suffix
-#' @param quote
+#' @param quote logical, passed to write.csv
 #'
 #' @return
 #' @export
@@ -55,6 +54,9 @@ rewrite_for_moodle <- function(nops_zip,
                         stringsAsFactors = FALSE, check.names = FALSE)
   worksheet_names <- names(worksheet)
   merged_df <- merge(nops_eval, worksheet)
+  merged_df$dir_name <- sprintf(pattern,
+                                merged_df[[worksheet_names[[2]]]],
+                                merged_df$sid)
 
   # Write out updated Grading Worksheet
   write.csv(merged_df[worksheet_names],
