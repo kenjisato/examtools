@@ -3,7 +3,6 @@
 export(browse_nops_eval)
 export(nops_eval_write_custom)
 export(rewrite_for_moodle)
-import(DT)
 import(miniUI)
 import(shiny)
 importFrom(grDevices,hcl)

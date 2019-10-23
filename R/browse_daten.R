@@ -10,7 +10,6 @@
 #' @importFrom utils read.delim
 #' @import shiny
 #' @import miniUI
-#' @import DT
 check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 45) {
   daten <- read.delim(file.path(dir, file),
                       sep = " ", header = FALSE, colClasses = "character"
@@ -59,7 +58,7 @@ check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 
       miniTabPanel("Data",
                    icon = icon("table"),
                    miniContentPanel(
-                     DTOutput("Daten")
+                     DT::DTOutput("Daten")
                    )
       )
     )
@@ -106,7 +105,7 @@ check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 
       showImage(i)
     }
 
-    output$Daten <- renderDT(
+    output$Daten <- DT::renderDT(
       daten,
       server = FALSE,
       selection = list(mode = "single")
