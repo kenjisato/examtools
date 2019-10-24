@@ -1,5 +1,5 @@
 
-#' @title Customized nops_eval_write
+#' @title Customized nops_eval_write for examtools
 #'
 #' @param results character or data.frame. Path to nops_eval.csv.
 #' @param name character. Output file name for individual reports, with extension.
@@ -12,10 +12,10 @@
 #' @importFrom grDevices hcl
 #' @importFrom utils read.csv2 zip
 #' @importFrom whisker whisker.render rowSplit
-nops_eval_write_custom <- function(results = "nops_eval.csv",
-                                   name = "report.html",
-                                   template = NULL,
-                                   ...) {
+nops_eval_write_examtools <- function(results = "nops_eval.csv",
+                                      name = "report.html",
+                                      template = NULL,
+                                      ...) {
 
   stopifnot(requireNamespace("base64enc"))
 
