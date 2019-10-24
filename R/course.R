@@ -65,8 +65,34 @@ course_init <- function() {
   yaml::write_yaml(yml, "course.yml")
 }
 
-course_check <- function() {
 
+course_check <- function() {
+  if (!file.exists("course.yml")) {
+    stop("course.yml does not exist. Please initialize with\n",
+         "   course_init()")
+  }
+
+  mandatory_fields <- c("institution",
+                        "course",
+                        "language",
+                        "reglength",
+                        "register",
+                        "problems_dir",
+                        "nops_dir",
+                        "seed")
+
+  yml <- yaml::read_yaml("course.yml")
+  missing <- list()
+  for (field in mandatory_fields){
+    if (is_empty(yml[[field]])) {
+      missing[length(missing) + 1] <- field
+    }
+  }
+  if (length(missing) > 0) {
+    stop("Following fields are missing: ", paste(missing, collapse = " "),
+         "\nPlease fix ", "course.yml")
+  }
+  invisible(yml)
 }
 
 
