@@ -43,10 +43,26 @@ course_init <- function() {
   nops_dir <- readline(prompt = "Path to create NOPS exams: [nops]: ")
   if (nops_dir == "") nops_dir <- "nops"
 
-  message("Package {examtools} mixes common random seed and the date of \n",
-          "individual examination when producing NOPS exams.",
-          "Please keep this randomly picked 'seed' secret!")
+  for (d in c(problems_dir, nops_dir)){
+    suppressWarnings(res <- dir.create(d, recursive = TRUE))
+    if (res) message(d, " created.")
+  }
+  message("*****")
+  message("Package {examtools} produces random seed for an individual \n",
+          "NOPS exam, by mixing common random seed and the date of \n",
+          "individual examination when producing NOPS exams. \n",
+          "Please keep this randomly picked 'common seed' secret!")
   seed = sample(1:10000, 1)
+
+  samples_dir <- file.path(dirname(problems_dir), "samples")
+  copy_sample <- readline(prompt = paste0("Copy samples to ",
+                                          samples_dir,": [Y]es/No: "))
+  if (copy_sample[[1]] %in% c("", "y", "Y")) {
+    dir.create(samples_dir)
+    exercises <- list.files(system.file("exercises", package = "exams"),
+                            pattern = "Rmd$", full.names = TRUE)
+    file.copy(exercises, file.path(samples_dir, basename(exercises)))
+  }
 
   yml <- list(
     institution = institution,
@@ -61,8 +77,10 @@ course_init <- function() {
     seed = seed
   )
 
-  message("Course information is saved to ", "course.yml")
   yaml::write_yaml(yml, "course.yml")
+
+  message("Course information is saved to ", "course.yml")
+
 }
 
 
