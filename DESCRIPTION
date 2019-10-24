@@ -20,5 +20,6 @@ Imports:
     shiny,
     miniUI,
     DT,
-    png
+    png,
+    yaml
 RoxygenNote: 6.1.1
