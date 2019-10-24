@@ -1,14 +1,11 @@
 
 #' @title Customized nops_eval_write
 #'
-#' @param results character. Path to nops_eval.csv
-#' @param file character. Path to nops_eval.zip
-#' @param name character. Output file name, with extension.
+#' @param results character or data.frame. Path to nops_eval.csv or data.frame for the same data.
+#' @param name character. Output file name for individual reports, with extension.
 #' @param template character. HTML template for output files.
-#' @param encoding character. Encoding as in \code{\link[exams]{nops_eval}}
-#' @param language character. Language as in \code{\link[exams]{nops_eval}}
-#' @param converter character. Converter as in \code{\link[exams]{nops_eval}}
-#' @param ... list. Ignored.
+#' @param ... list. \code{encoding}, \code{language}, \code{converter}, and \code{dir}, passed to
+#'        \code{\link[exams]{nops_eval}}, are respected.
 #'
 #' @export
 #'
@@ -17,19 +14,21 @@
 #' @importFrom whisker whisker.render rowSplit
 nops_eval_write_custom <- function(
   results = "nops_eval.csv",
-  file = "nops_eval.zip",
   name = "report.html",
   template = NULL,
-  encoding = "UTF-8",
-  language = "en",
-  converter = NULL,
   ...) {
 
   stopifnot(requireNamespace("base64enc"))
 
-  if (is.character(results)) {
-    results <- read.csv2(results, colClasses = "character")
-  }
+  # Explicitly Inherit Parameters
+  dots <- list(...)
+  encoding <- dots$encoding
+  language <- dots$language
+  converter <- dots$converter
+  dir <- dots$dir
+
+  out_zip <- paste0(tools::file_path_sans_ext(basename(results)), ".zip")
+  results <- read.csv2(results, colClasses = "character")
 
   names(results)[1:3] <- c("registration", "name", "id")
   rownames(results) <- results$registration
@@ -89,8 +88,8 @@ nops_eval_write_custom <- function(
   checkClasses <- c("negative", "neutral", "positive", "full")
 
   odir <- getwd()
-  dir.create(dir <- tempfile())
-  setwd(dir)
+  dir.create(temp_dir <- tempfile())
+  setwd(temp_dir)
   on.exit(setwd(odir))
 
   for (i in 1L:nrow(results)) {
@@ -98,7 +97,7 @@ nops_eval_write_custom <- function(
 
     id <- rownames(results)[i]
     ac <- results[id, "id"]
-    dir.create(file.path(dir, ac))
+    dir.create(file.path(temp_dir, ac))
 
     ## Exam Information
     dat$name <- results[id, "name"]
@@ -130,11 +129,9 @@ nops_eval_write_custom <- function(
     }
 
     template_i <- whisker.render(template, dat)
-    writeLines(template_i, file.path(dir, ac, name))
+    writeLines(template_i, file.path(temp_dir, ac, name))
   }
 
-  setwd(dir)
-
-  invisible(zip(file.path(odir, file), c(results[, "id"])))
+  invisible(zip(file.path(dir, out_zip), c(results[, "id"])))
 
 }
