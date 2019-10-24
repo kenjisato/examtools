@@ -5,16 +5,17 @@
 \title{Customized nops_eval_write}
 \usage{
 nops_eval_write_custom(results = "nops_eval.csv",
-  file = "nops_eval.zip", html = "exam_eval.html",
-  encoding = "UTF-8", language = "en", converter = NULL,
-  template = NULL)
+  file = "nops_eval.zip", name = "report.html", template = NULL,
+  encoding = "UTF-8", language = "en", converter = NULL, ...)
 }
 \arguments{
 \item{results}{character. Path to nops_eval.csv}
 
 \item{file}{character. Path to nops_eval.zip}
 
-\item{html}{character. html parameter as in \code{\link[exams]{nops_eval}}}
+\item{name}{character. Output file name, with extension.}
+
+\item{template}{character. HTML template for output files.}
 
 \item{encoding}{character. Encoding as in \code{\link[exams]{nops_eval}}}
 
@@ -22,7 +23,7 @@ nops_eval_write_custom(results = "nops_eval.csv",
 
 \item{converter}{character. Converter as in \code{\link[exams]{nops_eval}}}
 
-\item{template}{character. HTML template for output files.}
+\item{...}{list. Ignored.}
 }
 \description{
 Customized nops_eval_write

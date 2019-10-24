@@ -3,11 +3,12 @@
 #'
 #' @param results character. Path to nops_eval.csv
 #' @param file character. Path to nops_eval.zip
-#' @param html character. html parameter as in \code{\link[exams]{nops_eval}}
+#' @param name character. Output file name, with extension.
+#' @param template character. HTML template for output files.
 #' @param encoding character. Encoding as in \code{\link[exams]{nops_eval}}
 #' @param language character. Language as in \code{\link[exams]{nops_eval}}
 #' @param converter character. Converter as in \code{\link[exams]{nops_eval}}
-#' @param template character. HTML template for output files.
+#' @param ... list. Ignored.
 #'
 #' @export
 #'
@@ -17,11 +18,12 @@
 nops_eval_write_custom <- function(
   results = "nops_eval.csv",
   file = "nops_eval.zip",
-  html = "exam_eval.html",
+  name = "report.html",
+  template = NULL,
   encoding = "UTF-8",
   language = "en",
   converter = NULL,
-  template = NULL) {
+  ...) {
 
   stopifnot(requireNamespace("base64enc"))
 
@@ -60,7 +62,6 @@ nops_eval_write_custom <- function(
   if (!is.null(lang$PointSum)) {
     lang$Points <- lang$PointSum
   }
-  name <- html
 
   template <- if (!is.null(template)) {
     tools::file_path_as_absolute(template)
