@@ -1,5 +1,5 @@
 
-#' Set up one exam.
+#' Step 0: Set up one exam.
 #'
 #' @param problems list of problems.
 #' @param date character. Representing the date of exam. e.g.) "2019-10-10"
@@ -24,7 +24,7 @@ exam <- function(problems, date, name, shortname = date,
 }
 
 
-#' Create NOPS written exam
+#' Step 1: Create NOPS written exam
 #'
 #' @param exam list of exam information. Created with \code{exam}
 #' @param latex.cover character. Path to a tex file cover page or intro message.
@@ -103,12 +103,98 @@ exam_create <- function(exam,
     saveRDS(exam, file.path(out.dir, paste0(shortname, "-exam.rds")))
 }
 
+#' Step 2: Print
+#' Step 3: Exam
 
+#' Step 4: Scan exam sheets
+#'
+#' @param exam character. path to saved RDS file.
+#' @param images scanned images (PNG's or PDF file)
+#' @param ... parameters passed on to \code{exams::nops_scan}
+#'
+#' @return contents of Daten.txt as a character vector. Returned invisibly.
+#' @export
+#'
+exam_scan <- function(exam, images, ...){
 
-exam_scan <- function() {
-
+  out.dir <- tools::file_path_as_absolute(exam)
+  exam <- readRDS(exam)
+  images <- tools::file_path_as_absolute(images)
+  exams::nops_scan(images, dir = out.dir,
+                   file = paste0(exam$shortname, "_scan"), ...)
 }
 
-exam_evaluate <- function() {
 
+#' Step 5: Evaluate the exam
+#'
+#' @param exam character. path to saved RDS file.
+#' @param flavor character. User nops_eval_write_<flavor>
+#' @param report.template character. Passed on to nops_eval_write_<flavor>
+#'    as an argument to template paramter
+#' @param eval list specification of evaluation policy
+#' @param ... Parameters passed on to \code{nops_eval} and \code{nops_eval_write_*}.
+#'    As for \code{nops_eval}, respected parameters are \code{points}, \code{mark},
+#'    \code{labels}, \code{results}, \code{file}, \code{interactive},
+#'    \code{string_scans}, \code{string_points}. The other parameters are ignored.
+#'
+#' @return \code{data.frame} of marked result.
+#' @export
+#'
+exam_evaluate <-
+  function(exam, flavor = "examtools",
+           report.template = system.file("xml", "report.html", package = "examtools"),
+           eval = exams::exams_eval(partial = FALSE, negative = FALSE),
+           ...){
+
+  # Default parameters for nops_eval()
+  dots <- list(...)
+  points <- if (is.null(dots$points)) NULL else dots$points
+  mark <- if (is.null(dots$mark)) c(0.5, 0.6, 0.75, 0.85) else dots$mark
+  labels <- if (is.null(dots$labels)) NULL else dots$labels
+  results <- if (is.null(dots$results)) "nops_eval" else dots$results
+  file <- if (is.null(dots$file)) NULL else dots$file
+  interactive <- if (is.null(dots$interactive)) TRUE else dots$interactive
+  string_scans <-
+    if (is.null(dots$string_scans)) character(0) else dots$string_scans
+  string_points <-
+    if (is.null(dots$string_points)) seq(0, 1, 0.25) else dots$string_points
+
+
+  out.dir <- tools::file_path_as_absolute(exam)
+  exam <- readRDS(exam)
+  course <- exam$course
+
+  if (is.null(scans)){
+    scans <- file.path(out.dir, paste0(exam$shortname, "_scan.zip"))
+  }
+  if (is.null(solutions)){
+    solutions <- file.path(out.dir, paste0(exam$shortname, ".rds"))
+  }
+
+  ev <- exams::nops_eval(
+    register = course$register,
+    solutions = solutions,
+    scans = scans,
+    points = points,
+    eval = eval,
+    mark = mark,
+    labels = labels,
+    dir = out.dir,
+    results = results,
+    file = file,
+    flavor = flavor,
+    language = course$language,
+    interactive = interactive,
+    string_scans = string_scans,
+    string_points = string_points,
+    template = report.template,
+    ...)
+
+  ## Omit this when the bug in nops_eval is fixed.
+  for (file in c("nops_eval.csv", "nops_eval.zip")){
+    file.copy(file, file.path(out.dir, file), overwrite = TRUE)
+    unlink(file)
+  }
+
+  ev
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/exam.R
 \name{exam}
 \alias{exam}
-\title{Set up one exam.}
+\title{Step 0: Set up one exam.}
 \usage{
 exam(problems, date, name, shortname = date, versions = 1,
   samples.from.group = 1)
@@ -24,5 +24,5 @@ exam(problems, date, name, shortname = date, versions = 1,
 list of exam information. Result is passed to \code{exam_create}
 }
 \description{
-Set up one exam.
+Step 0: Set up one exam.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/exam.R
 \name{exam_create}
 \alias{exam_create}
-\title{Create NOPS written exam}
+\title{Step 1: Create NOPS written exam}
 \usage{
 exam_create(exam, latex.cover = NULL, html.template = NULL,
   encryptHTML = TRUE, course.as.pdf.title = TRUE, ...)
@@ -28,5 +28,5 @@ institution is used.}
 invisible NULL
 }
 \description{
-Create NOPS written exam
+Step 1: Create NOPS written exam
 }
