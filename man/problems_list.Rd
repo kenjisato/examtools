@@ -4,16 +4,19 @@
 \alias{problems_list}
 \title{Lists problems in a directory.}
 \usage{
-problems_list(path, group.sep = "-", exclude = NULL)
+problems_list(path, group.sep = "-", exclude = NULL, basedir = NULL)
 }
 \arguments{
-\item{path}{character. Path to a directory that contains problems Rnw/Rmd.
+\item{path}{character. Path to a directory that contains problems Rnw/Rmd, relative to basedir.
 This function assumes particular naming rules. For further details, see below.}
 
 \item{group.sep}{character. Character to indicate groups. For further details, see below.}
 
 \item{exclude}{character string containing a regular expression to be searched for.
 Files that match this pattern are excluded from the output.}
+
+\item{basedir}{character. Base directory relative to which Path is specified. Defaults to
+problems_dir in course.yml}
 }
 \value{
 List, which can be passed to exams function such as \code{exams::exams2pdf}.

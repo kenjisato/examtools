@@ -1,10 +1,12 @@
 #' Lists problems in a directory.
 #'
-#' @param path character. Path to a directory that contains problems Rnw/Rmd.
+#' @param path character. Path to a directory that contains problems Rnw/Rmd, relative to basedir.
 #'     This function assumes particular naming rules. For further details, see below.
 #' @param group.sep character. Character to indicate groups. For further details, see below.
 #' @param exclude character string containing a regular expression to be searched for.
 #'   Files that match this pattern are excluded from the output.
+#' @param basedir character. Base directory relative to which Path is specified. Defaults to
+#'    problems_dir in course.yml
 #'
 #' @return List, which can be passed to exams function such as \code{exams::exams2pdf}.
 #' @export
@@ -22,7 +24,12 @@
 #'   path <- system.file("inst", "samples", package = "examtools")
 #'   problems_list(path)
 #'
-problems_list <- function(path, group.sep = "-", exclude = NULL) {
+problems_list <- function(path, group.sep = "-", exclude = NULL, basedir = NULL) {
+
+  course <- course_check()
+  if (is.null(basedir)) basedir <- course$problems_dir
+  path <- file.path(basedir, path)
+
   files <- list.files(path, full.names = FALSE, pattern = "(Rmd|Rnw)$")
   if (!is.null(exclude)) {
     files <- files[!grepl(exclude, files)]
