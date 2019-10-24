@@ -8,7 +8,7 @@ nops_eval_write_custom(results = "nops_eval.csv", name = "report.html",
   template = NULL, ...)
 }
 \arguments{
-\item{results}{character or data.frame. Path to nops_eval.csv or data.frame for the same data.}
+\item{results}{character or data.frame. Path to nops_eval.csv.}
 
 \item{name}{character. Output file name for individual reports, with extension.}
 

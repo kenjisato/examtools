@@ -1,7 +1,7 @@
 
 #' @title Customized nops_eval_write
 #'
-#' @param results character or data.frame. Path to nops_eval.csv or data.frame for the same data.
+#' @param results character or data.frame. Path to nops_eval.csv.
 #' @param name character. Output file name for individual reports, with extension.
 #' @param template character. HTML template for output files.
 #' @param ... list. \code{encoding}, \code{language}, \code{converter}, and \code{dir}, passed to
@@ -12,11 +12,10 @@
 #' @importFrom grDevices hcl
 #' @importFrom utils read.csv2 zip
 #' @importFrom whisker whisker.render rowSplit
-nops_eval_write_custom <- function(
-  results = "nops_eval.csv",
-  name = "report.html",
-  template = NULL,
-  ...) {
+nops_eval_write_custom <- function(results = "nops_eval.csv",
+                                   name = "report.html",
+                                   template = NULL,
+                                   ...) {
 
   stopifnot(requireNamespace("base64enc"))
 
@@ -26,6 +25,9 @@ nops_eval_write_custom <- function(
   language <- dots$language
   converter <- dots$converter
   dir <- dots$dir
+
+  # encoding defaults to UTF-8
+  if (is.null(encoding)) encoding <- "UTF-8"
 
   out_zip <- paste0(tools::file_path_sans_ext(basename(results)), ".zip")
   results <- read.csv2(results, colClasses = "character")
