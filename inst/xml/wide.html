@@ -5,24 +5,49 @@
 <title>{{registration}} - {{LANG_ExamResults}}</title>
 
 <style>
+  body { -webkit-print-color-adjust: exact; }
+  h3 { font-family: system-ui, sans-serif; }
   table { border-collapse: collapse; }
-  #Data {float: left; }
-  #ExamResults td {
-    padding: 2px;
+  #Data {
+    min-width: 200px;
+    float: left;
   }
-  #Evaluation td {
+  #ExamResults td { padding: 2px; }
+  #Info { margin-left: 20px; }
+  #Info tr:nth-child(odd){
+    background-color: #F7F7F7;
+  }
+  #Info td:first-child {
+    font-family: system-ui, sans-serif;
+    width: 80px;
+  }
+  #Info td {
+    padding: 2px;
+    height: 20px;
+  }
+  #Evaluation td, th {
+    width: 50px;
+    height: 25px;
     border: solid 1px black;
-    text-align: right;
-    vertical-align: top;
+    text-align: center;
     padding: 2px;
   }
-  #ExamSheet { float: left; }
-  #ExamSheet img { width: 600px; }
+  #Evaluation th {
+    font-weight: bold;
+    font-family: system-ui, sans-serif;
+  }
+  #scores { margin-left: 20px; }
+  #ExamSheet {
+    max-width: 1000px;
+    min-width: 480px;
+    float: left;
+  }
+  #ExamSheet img { width: 100%; }
 
-  .full { background-color: #AEF595; }
-  .positive { background-color: #FFDC87; }
-  .neutral { background-color: #E2E2E2;}
-  .negative { background-color: #FFC3DA;}
+  .full { background-color: #AEF595 !important; }
+  .positive { background-color: #FFDC87 !important; }
+  .neutral { background-color: #E2E2E2 !important; }
+  .negative { background-color: #FFC3DA !important; }
 </style>
 
 {{{head}}}
@@ -36,15 +61,15 @@
 <div id="Data">
 <div id="ExamResults">
   <h3>{{LANG_ExamResults}}</h3>
-  <table>
+  <table id="Info">
   <tr>
-    <td>{{LANG_Name}}:</td><td>{{name}}</td>
+    <td>{{LANG_Name}}</td><td>{{name}}</td>
   </tr>
   <tr>
-    <td>{{LANG_RegistrationNumber}}:</td><td>{{registration}}</td>
+    <td>{{LANG_RegistrationNumber}}</td><td>{{registration}}</td>
   </tr>
   <tr>
-    <td>{{LANG_DocumentID}}:</td><td>{{exam}}</td>
+    <td>{{LANG_DocumentID}}</td><td>{{exam}}</td>
   </tr>
   {{#has_mark}}
   <tr>
@@ -52,15 +77,20 @@
   </tr>
   {{/has_mark}}
   <tr>
-    <td>{{LANG_Points}}:</td><td>{{points}}</td>
+    <td>{{LANG_Points}}</td><td>{{points}}</td>
   </tr>
   </table>
 </div>
 
 <div id="Evaluation">
   <h3>{{LANG_Evaluation}}</h3>
-  <table id = "evaluation">
-  <tr><td>{{LANG_Question}}</td><td>{{LANG_Points}}</td><td>{{LANG_GivenAnswer}}</td><td>{{LANG_CorrectAnswer}}</td></tr>
+  <table id="scores">
+  <tr>
+    <th>{{LANG_Question}}</th>
+    <th>{{LANG_Points}}</th>
+    <th>{{LANG_GivenAnswer}}</th>
+    <th>{{LANG_CorrectAnswer}}</th>
+  </tr>
 
   {{#results}}
     <tr class="{{check}}">
