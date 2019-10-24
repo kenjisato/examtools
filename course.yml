@@ -1,0 +1,10 @@
+institution: 大阪府立大学
+course: マクロ経済学入門
+year: '2019'
+language: ja
+logo: logo.jpg
+reglength: 10
+register: register.csv
+problems_dir: problems
+nops_dir: nops
+seed: 6400
