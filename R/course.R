@@ -27,7 +27,6 @@ course_init <- function() {
   if (language == "") language <- "en"
 
   logo <- readline(prompt = "Relative path to logo: [NULL]: ")
-  if (logo == "") logo <- NULL
 
   reglength <- readline(prompt = "Number of digits in the registration ID: [7]: ")
   reglength <- if (reglength == "") 7 else as.integer(reglength)
