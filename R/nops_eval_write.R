@@ -108,6 +108,7 @@ nops_eval_write_custom <- function(
 
     ## Results for Individual Problems
     res <- data.frame(
+      question = 1L:m,
       check = as.numeric(results[id, paste("check", 1L:m, sep = ".")]),
       answer = as.character(results[id, paste("answer", 1L:m, sep = ".")]),
       solution = as.character(results[id, paste("solution", 1L:m, sep = ".")]),
