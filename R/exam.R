@@ -117,7 +117,7 @@ exam_create <- function(exam,
 #'
 exam_scan <- function(exam, images, ...){
 
-  out.dir <- tools::file_path_as_absolute(exam)
+  out.dir <- dirname(tools::file_path_as_absolute(exam))
   exam <- readRDS(exam)
   images <- tools::file_path_as_absolute(images)
   exams::nops_scan(images, dir = out.dir,
