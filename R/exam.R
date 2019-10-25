@@ -103,8 +103,8 @@ exam_create <- function(exam,
     saveRDS(exam, file.path(out.dir, paste0(shortname, "-exam.rds")))
 }
 
-#' Step 2: Print
-#' Step 3: Exam
+# Step 2: Print
+# Step 3: Exam
 
 #' Step 4: Scan exam sheets
 #'
