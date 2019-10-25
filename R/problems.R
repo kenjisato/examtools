@@ -37,9 +37,9 @@ problems_list <- function(path, group.sep = "-", exclude = NULL, basedir = NULL)
     files <- files[!grepl(exclude, files)]
   }
 
-  cloze <- detect_cloze(files)
+  cloze <- detect_cloze(file.path(path, files))
   if (length(cloze) > 0) {
-    stop("The following files are cloze exercises: ",
+    stop("The following files are cloze exercises: \n",
          paste(cloze, collapse = "\n"))
   }
 
