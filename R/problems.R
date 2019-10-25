@@ -28,12 +28,19 @@
 problems_list <- function(path, group.sep = "-", exclude = NULL, basedir = NULL) {
 
   course <- course_check()
+
   if (is.null(basedir)) basedir <- course$problems_dir
   path <- file.path(basedir, path)
 
   files <- list.files(path, full.names = FALSE, pattern = "(Rmd|Rnw)$")
   if (!is.null(exclude)) {
     files <- files[!grepl(exclude, files)]
+  }
+
+  cloze <- detect_cloze(files)
+  if (length(cloze) > 0) {
+    stop("The following files are cloze exercises: ",
+         paste(cloze, collapse = "\n"))
   }
 
   lst <- strsplit(files, split = group.sep, fixed = TRUE)
@@ -52,3 +59,9 @@ problems_list <- function(path, group.sep = "-", exclude = NULL, basedir = NULL)
   problems
 }
 
+
+detect_cloze <- function(file) {
+  # Find cloze exercises, which are not supported
+  cloze <- sapply(unique(unlist(file)), function(f) any(grepl("extype:\\s*cloze", readLines(f))))
+  names(cloze[cloze == TRUE])
+}

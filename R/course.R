@@ -61,6 +61,7 @@ course_init <- function() {
     dir.create(samples_dir)
     exercises <- list.files(system.file("exercises", package = "exams"),
                             pattern = "Rmd$", full.names = TRUE)
+    setdiff(exercises, detect_cloze(exercises))
     file.copy(exercises, file.path(samples_dir, basename(exercises)))
   }
 
