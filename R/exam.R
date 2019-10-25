@@ -110,18 +110,23 @@ exam_create <- function(exam,
 #'
 #' @param exam character. path to saved RDS file.
 #' @param images scanned images (PNG's or PDF file)
-#' @param ... parameters passed on to \code{exams::nops_scan}
+#' @param ... parameters passed on to \code{exams::nops_scan}. NB: \code{dir} and \code{file}
+#'   are overwritten by default configurations
 #'
 #' @return contents of Daten.txt as a character vector. Returned invisibly.
 #' @export
 #'
 exam_scan <- function(exam, images, ...){
 
-  out.dir <- dirname(tools::file_path_as_absolute(exam))
-  exam <- readRDS(exam)
-  images <- tools::file_path_as_absolute(images)
-  exams::nops_scan(images, dir = out.dir,
-                   file = paste0(exam$shortname, "_scan"), ...)
+  params <- list(...)
+  params$dir <- dirname(tools::file_path_as_absolute(exam))
+  examinfo <- readRDS(exam)
+
+  params$file <- paste0(examinfo$shortname, "_scan")
+  params$images <- tools::file_path_as_absolute(images)
+
+  do.call(exams::nops_scan, params)
+
 }
 
 
@@ -160,14 +165,14 @@ exam_evaluate <-
     if (is.null(dots$string_points)) seq(0, 1, 0.25) else dots$string_points
 
 
-  out.dir <- tools::file_path_as_absolute(exam)
+  out.dir <- dirname(tools::file_path_as_absolute(exam))
   exam <- readRDS(exam)
   course <- exam$course
 
-  if (is.null(scans)){
+  if (is.null(dots$scans)){
     scans <- file.path(out.dir, paste0(exam$shortname, "_scan.zip"))
   }
-  if (is.null(solutions)){
+  if (is.null(dots$solutions)){
     solutions <- file.path(out.dir, paste0(exam$shortname, ".rds"))
   }
 

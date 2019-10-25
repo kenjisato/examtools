@@ -2,9 +2,7 @@
 % Please edit documentation in R/exam.R
 \name{exam_scan}
 \alias{exam_scan}
-\title{Step 2: Print
-Step 3: Exam
-Step 4: Scan exam sheets}
+\title{Step 4: Scan exam sheets}
 \usage{
 exam_scan(exam, images, ...)
 }
@@ -13,13 +11,12 @@ exam_scan(exam, images, ...)
 
 \item{images}{scanned images (PNG's or PDF file)}
 
-\item{...}{parameters passed on to \code{exams::nops_scan}}
+\item{...}{parameters passed on to \code{exams::nops_scan}. NB: \code{dir} and \code{file}
+are overwritten by default configurations}
 }
 \value{
 contents of Daten.txt as a character vector. Returned invisibly.
 }
 \description{
-Step 2: Print
-Step 3: Exam
 Step 4: Scan exam sheets
 }
