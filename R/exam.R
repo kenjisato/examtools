@@ -69,18 +69,13 @@ exam_create <- function(exam,
   # Randomness
   rseed <- as.integer(as.Date(exam$date)) + as.integer(course$seed)
 
-  # Seeds matrix
-  set.seed(rseed)
-  seed_matrix <- matrix(sample(1:1000,
-                               length(unlist(exam$problems)) * n), nrow = n)
-
   # HTML version
   set.seed(rseed)
   if (is.null(html.template)) {
     html.template <- system.file("xml", "plain.html", package = "examtools")
   }
   exams::exams2html(exam$problems, n = n, nsamp = nsamp, dir = out.dir,
-                    name = shortname.dash, solution = FALSE, seed = seed_matrix,
+                    name = shortname.dash, solution = FALSE,
                     mathjax = TRUE, template = html.template)
 
   if (encrypt) {
@@ -91,7 +86,7 @@ exam_create <- function(exam,
     }
     for (i in seq_len(n)){
       encrypted <- clientsideHtmlProtect::protect(
-        file.path(out.dir, paste0(shortname.dash, 1:n, ".html")),
+        file.path(out.dir, paste0(shortname.dash, i, ".html")),
         passphrase = passphrase)
       writeLines(encrypted, file.path(out.dir, paste0(shortname.dash, i, "-protected.html")))
     }
@@ -112,7 +107,6 @@ exam_create <- function(exam,
            date = exam$date,
            reglength = course$reglength,
            logo = file.path(getwd(), course$logo),
-           seed = seed_matrix,
            blank = 0,
            intro = latex.cover,
            ...)
