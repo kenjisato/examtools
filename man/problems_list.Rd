@@ -35,7 +35,8 @@ Problem filen ames should be like \code{01-abc.Rmd}, \code{02-xyz.Rmd},
   returns \code{list(c("01-abc.Rmd", "01-def.Rmd"), "02-xyz.Rmd")}.
 }
 \examples{
+\dontrun{
   path <- system.file("inst", "samples", package = "examtools")
   problems_list(path)
-
+}
 }

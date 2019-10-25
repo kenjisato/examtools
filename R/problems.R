@@ -21,9 +21,10 @@
 #'   returns \code{list(c("01-abc.Rmd", "01-def.Rmd"), "02-xyz.Rmd")}.
 #'
 #' @examples
+#' \dontrun{
 #'   path <- system.file("inst", "samples", package = "examtools")
 #'   problems_list(path)
-#'
+#'}
 problems_list <- function(path, group.sep = "-", exclude = NULL, basedir = NULL) {
 
   course <- course_check()
