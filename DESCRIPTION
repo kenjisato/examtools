@@ -1,7 +1,7 @@
 Package: examtools
 Type: Package
 Title: Helper Tools for exams Package
-Version: 0.0.0.9005
+Version: 0.0.0.9006
 Author: Kenji Sato
 Maintainer: Kenji Sato <mail@kenjisato.jp>
 Description: This package collects tools to extend exams package.
@@ -23,3 +23,7 @@ Imports:
     png,
     yaml
 RoxygenNote: 6.1.1
+Suggests: 
+    clientsideHtmlProtect (>= 0.0.0.9000)
+Remotes:  
+    kenjisato/clientsideHtmlProtect

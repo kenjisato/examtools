@@ -12,7 +12,7 @@
 #' @export
 #'
 exam <- function(problems, date, name, shortname = date,
-                 versions = 1, samples.from.group = 1) {
+                 versions = 1L, samples.from.group = NULL) {
   course <- course_check()
   list(problems = problems,
        date = date,
@@ -31,8 +31,8 @@ exam <- function(problems, date, name, shortname = date,
 #'    Passed to \code{intro} parameter of \code{exams2nops}
 #' @param html.template character. Path to template html. Passed to \code{template}
 #'    parameter of \code{exams2html}
-#' @param encryptHTML logical. If TRUE, password-protected version of HTML problem set
-#'    is also created.
+#' @param encryptHTML logical or character. If TRUE or passphrase is set, password-protected
+#'    version of HTML problem set is also created.
 #' @param course.as.pdf.title logical. If TRUE, use course title as PDF title. If FALSE,
 #'    institution is used.
 #' @param ..., other parameters passed to \code{exams2nops}
@@ -43,9 +43,17 @@ exam <- function(problems, date, name, shortname = date,
 exam_create <- function(exam,
                         latex.cover = NULL,
                         html.template = NULL,
-                        encryptHTML = TRUE,
+                        encryptHTML = FALSE,
                         course.as.pdf.title = TRUE,
                         ...){
+
+  encrypt <- isTRUE(encryptHTML) ||
+    if (is.character(encryptHTML)) as.logical(nchar(encryptHTML)) else FALSE
+
+  if (encrypt && !requireNamespace("clientsideHtmlProtect")){
+    stop("install clientsideHtmlProtect with: \n",
+         "remotes::install_github('kenjisato/clientsideHtmlProtect')")
+  }
 
   course <- exam$course
   shortname <- exam$shortname
@@ -56,32 +64,46 @@ exam_create <- function(exam,
 
   # Number of problem patterns
   n <- exam$versions
+  nsamp <- exam$samples.from.group
 
   # Randomness
   rseed <- as.integer(as.Date(exam$date)) + as.integer(course$seed)
 
   # Seeds matrix
   set.seed(rseed)
-  seed_matrix <- matrix(sample(1:1000, length(exam$problems) * n), nrow = n)
+  seed_matrix <- matrix(sample(1:1000,
+                               length(unlist(exam$problems)) * n), nrow = n)
 
   # HTML version
   set.seed(rseed)
   if (is.null(html.template)) {
     html.template <- system.file("xml", "plain.html", package = "examtools")
   }
-  exams::exams2html(exam$problems, dir = out.dir, name = shortname.dash,
-                    solution = FALSE, seed = seed_matrix,
-                    template = html.template)
+  exams::exams2html(exam$problems, n = n, nsamp = nsamp, dir = out.dir,
+                    name = shortname.dash, solution = FALSE, seed = seed_matrix,
+                    mathjax = TRUE, template = html.template)
 
-  if (encryptHTML) {
-    # To be implemented..
+  if (encrypt) {
+    passphrase <- if (isTRUE(encryptHTML)) {
+      readline(prompt = "passpharase: ")
+    } else {
+      encryptHTML
+    }
+    for (i in seq_len(n)){
+      encrypted <- clientsideHtmlProtect::protect(
+        file.path(out.dir, paste0(shortname.dash, 1:n, ".html")),
+        passphrase = passphrase)
+      writeLines(encrypted, file.path(out.dir, paste0(shortname.dash, i, "-protected.html")))
+    }
   }
+
 
   # NOPS PDF
   set.seed(rseed)
   exams::exams2nops(
            exam$problems,
            n = n,
+           nsamp = nsamp,
            dir = out.dir,
            name = shortname.dash,
            language = course$language,

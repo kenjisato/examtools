@@ -5,7 +5,7 @@
 \title{Step 1: Create NOPS written exam}
 \usage{
 exam_create(exam, latex.cover = NULL, html.template = NULL,
-  encryptHTML = TRUE, course.as.pdf.title = TRUE, ...)
+  encryptHTML = FALSE, course.as.pdf.title = TRUE, ...)
 }
 \arguments{
 \item{exam}{list of exam information. Created with \code{exam}}
@@ -16,8 +16,8 @@ Passed to \code{intro} parameter of \code{exams2nops}}
 \item{html.template}{character. Path to template html. Passed to \code{template}
 parameter of \code{exams2html}}
 
-\item{encryptHTML}{logical. If TRUE, password-protected version of HTML problem set
-is also created.}
+\item{encryptHTML}{logical or character. If TRUE or passphrase is set, password-protected
+version of HTML problem set is also created.}
 
 \item{course.as.pdf.title}{logical. If TRUE, use course title as PDF title. If FALSE,
 institution is used.}
