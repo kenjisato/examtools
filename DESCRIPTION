@@ -10,12 +10,10 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    servr,
     zip,
     exams (>= 2.3-5),
     base64enc,
     utils,
-    later,
     whisker,
     shiny,
     miniUI,
