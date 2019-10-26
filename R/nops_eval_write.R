@@ -9,7 +9,6 @@
 #'
 #' @export
 #'
-#' @importFrom grDevices hcl
 #' @importFrom utils read.csv2 zip
 #' @importFrom whisker whisker.render rowSplit
 nops_eval_write_examtools <- function(results = "nops_eval.csv",
