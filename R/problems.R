@@ -49,14 +49,12 @@ problems_list <- function(path, group.sep = "-", exclude = NULL, basedir = NULL)
     message("File names do not conform to the naming rule. Please check the result.")
   }
 
-
-
   groups <- unique(sapply(lst, `[[`, 1))
   problems <- list()
   for (i in seq_along(groups)){
     problems[[i]] <- files[startsWith(files, groups[[i]])]
   }
-  problems
+  lapply(problems, function(x) file.path(path, x))
 }
 
 
