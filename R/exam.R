@@ -31,6 +31,8 @@ exam <- function(problems, date, name, shortname = date,
 #'    Passed to \code{intro} parameter of \code{exams2nops}
 #' @param html.template character. Path to template html. Passed to \code{template}
 #'    parameter of \code{exams2html}
+#' @param solution.template character. Path to template tex. Passed to \code{template}
+#'    parameter of \code{exams2pdf}
 #' @param encryptHTML logical or character. If TRUE or passphrase is set, password-protected
 #'    version of HTML problem set is also created.
 #' @param course.as.pdf.title logical. If TRUE, use course title as PDF title. If FALSE,
@@ -43,6 +45,7 @@ exam <- function(problems, date, name, shortname = date,
 exam_create <- function(exam,
                         latex.cover = NULL,
                         html.template = NULL,
+                        solution.template = NULL,
                         encryptHTML = FALSE,
                         course.as.pdf.title = TRUE,
                         ...){
@@ -96,27 +99,41 @@ exam_create <- function(exam,
   # NOPS PDF
   set.seed(rseed)
   exams::exams2nops(
-           exam$problems,
-           n = n,
-           nsamp = nsamp,
-           dir = out.dir,
-           name = shortname.dash,
-           language = course$language,
-           institution = if (course.as.pdf.title) course$course else course$institution,
-           title = exam$name,
-           date = exam$date,
-           reglength = course$reglength,
-           logo = file.path(getwd(), course$logo),
-           blank = 0,
-           intro = latex.cover,
-           ...)
+    exam$problems,
+    n = n,
+    nsamp = nsamp,
+    dir = out.dir,
+    name = shortname.dash,
+    language = course$language,
+    institution = if (course.as.pdf.title) course$course else course$institution,
+    title = exam$name,
+    date = exam$date,
+    reglength = course$reglength,
+    logo = file.path(getwd(), course$logo),
+    blank = 0,
+    intro = latex.cover,
+    ...
+  )
 
-    # Rename metafile
-    file.rename(file.path(out.dir, paste0(shortname.dash, ".rds")),
-                file.path(out.dir, paste0(shortname, ".rds")))
+  # Solution
+  set.seed(rseed)
+  exams::exams2pdf(
+    exam$problems,
+    n = n,
+    nsamp = nsamp,
+    dir = out.dir,
+    template = solution.template,
+    header = list(Date = exam$date),
+    name = paste0(shortname.dash, "solution"),
+    ...
+  )
 
-    # Save Exam Information
-    saveRDS(exam, file.path(out.dir, paste0(shortname, "-exam.rds")))
+  # Rename metafile
+  file.rename(file.path(out.dir, paste0(shortname.dash, ".rds")),
+              file.path(out.dir, paste0(shortname, ".rds")))
+
+  # Save Exam Information
+  saveRDS(exam, file.path(out.dir, paste0(shortname, "-exam.rds")))
 }
 
 # Step 2: Print
@@ -138,7 +155,12 @@ exam_scan <- function(exam, images, ...){
   params$dir <- dirname(tools::file_path_as_absolute(exam))
   examinfo <- readRDS(exam)
 
-  params$file <- paste0(examinfo$shortname, "_scan")
+  if (is.null(params$string) || !params$string) {
+    params$file <- paste0(examinfo$shortname, "_scan")
+  } else {
+    params$file <- paste0(examinfo$shortname, "_str_scan")
+  }
+
   params$images <- tools::file_path_as_absolute(images)
 
   do.call(exams::nops_scan, params)
@@ -168,48 +190,32 @@ exam_evaluate <-
            ...){
 
   # Default parameters for nops_eval()
-  dots <- list(...)
-  points <- if (is.null(dots$points)) NULL else dots$points
-  mark <- if (is.null(dots$mark)) c(0.5, 0.6, 0.75, 0.85) else dots$mark
-  labels <- if (is.null(dots$labels)) NULL else dots$labels
-  results <- if (is.null(dots$results)) "nops_eval" else dots$results
-  file <- if (is.null(dots$file)) NULL else dots$file
-  interactive <- if (is.null(dots$interactive)) TRUE else dots$interactive
-  string_scans <-
-    if (is.null(dots$string_scans)) character(0) else dots$string_scans
-  string_points <-
-    if (is.null(dots$string_points)) seq(0, 1, 0.25) else dots$string_points
+  params <- list(...)
+
+  params$flavor = flavor
+  params$template = report.template
+  params$eval = eval
 
 
+  # destination directory
   out.dir <- dirname(tools::file_path_as_absolute(exam))
+  params$dir <- out.dir
+
   exam <- readRDS(exam)
   course <- exam$course
 
-  if (is.null(dots$scans)){
-    scans <- file.path(out.dir, paste0(exam$shortname, "_scan.zip"))
+  # Use global setting from course.yml
+  if (is.null(params$register)) params$register <- course$register
+
+  if (is.null(params$scans)){
+    params$scans <- file.path(out.dir, paste0(exam$shortname, "_scan.zip"))
   }
-  if (is.null(dots$solutions)){
-    solutions <- file.path(out.dir, paste0(exam$shortname, ".rds"))
+  if (is.null(params$solutions)){
+    params$solutions <- file.path(out.dir, paste0(exam$shortname, ".rds"))
   }
 
-  ev <- exams::nops_eval(
-    register = course$register,
-    solutions = solutions,
-    scans = scans,
-    points = points,
-    eval = eval,
-    mark = mark,
-    labels = labels,
-    dir = out.dir,
-    results = results,
-    file = file,
-    flavor = flavor,
-    language = course$language,
-    interactive = interactive,
-    string_scans = string_scans,
-    string_points = string_points,
-    template = report.template,
-    ...)
+  ev <- do.call(exams::nops_eval, params)
+
 
   ## Omit this when the bug in nops_eval is fixed.
   for (file in c("nops_eval.csv", "nops_eval.zip")){
