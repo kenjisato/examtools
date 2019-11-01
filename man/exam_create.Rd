@@ -9,7 +9,7 @@ exam_create(exam, latex.cover = NULL, html.template = NULL,
   course.as.pdf.title = TRUE, ...)
 }
 \arguments{
-\item{exam}{list of exam information. Created with \code{exam}}
+\item{exam}{exam short name, directory contains config.rds, created with \code{exam}}
 
 \item{latex.cover}{character. Path to a tex file cover page or intro message.
 Passed to \code{intro} parameter of \code{exams2nops}}

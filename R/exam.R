@@ -14,19 +14,24 @@
 exam <- function(problems, date, name, shortname = date,
                  versions = 1L, samples.from.group = NULL) {
   course <- course_check()
-  list(problems = problems,
-       date = date,
-       name = name,
-       shortname = shortname,
-       versions = versions,
-       samples.from.group = samples.from.group,
-       course = course)
+  out.dir <- file.path(course$nops_dir, exam$shortname)
+
+  ex <- list(problems = problems,
+             date = date,
+             name = name,
+             shortname = shortname,
+             versions = versions,
+             samples.from.group = samples.from.group,
+             course = course)
+
+  # Save Exam Information
+  saveRDS(ex, file.path(out.dir, "config.rds"))
 }
 
 
 #' Step 1: Create NOPS written exam
 #'
-#' @param exam list of exam information. Created with \code{exam}
+#' @param exam exam short name, directory contains config.rds, created with \code{exam}
 #' @param latex.cover character. Path to a tex file cover page or intro message.
 #'    Passed to \code{intro} parameter of \code{exams2nops}
 #' @param html.template character. Path to template html. Passed to \code{template}
@@ -49,6 +54,10 @@ exam_create <- function(exam,
                         encryptHTML = FALSE,
                         course.as.pdf.title = TRUE,
                         ...){
+
+  course <- course_check()
+  examdir <- file.path(course$nops_dir, exam)
+  exam <- readRDS(file.path(examdir, "config.rds"))
 
   encrypt <- isTRUE(encryptHTML) ||
     if (is.character(encryptHTML)) as.logical(nchar(encryptHTML)) else FALSE
@@ -131,9 +140,6 @@ exam_create <- function(exam,
   # Rename metafile
   file.rename(file.path(out.dir, paste0(shortname.dash, ".rds")),
               file.path(out.dir, paste0(shortname, ".rds")))
-
-  # Save Exam Information
-  saveRDS(exam, file.path(out.dir, paste0(shortname, "-exam.rds")))
 }
 
 # Step 2: Print
@@ -141,7 +147,7 @@ exam_create <- function(exam,
 
 #' Step 4: Scan exam sheets
 #'
-#' @param exam character. path to saved RDS file.
+#' @param exam short name, directory contains config.rds, created with \code{exam}
 #' @param images scanned images (PNG's or PDF file)
 #' @param ... parameters passed on to \code{exams::nops_scan}. NB: \code{dir} and \code{file}
 #'   are overwritten by default configurations
@@ -151,14 +157,17 @@ exam_create <- function(exam,
 #'
 exam_scan <- function(exam, images, ...){
 
+  course <- course_check()
+  examdir <- file.path(course$nops_dir, exam)
+  exam <- readRDS(file.path(examdir, "config.rds"))
+
   params <- list(...)
-  params$dir <- dirname(tools::file_path_as_absolute(exam))
-  examinfo <- readRDS(exam)
+  params$dir <- examdir
 
   if (is.null(params$string) || !params$string) {
-    params$file <- paste0(examinfo$shortname, "_scan")
+    params$file <- paste0(exam$shortname, "_scan")
   } else {
-    params$file <- paste0(examinfo$shortname, "_str_scan")
+    params$file <- paste0(exam$shortname, "_str_scan")
   }
 
   params$images <- tools::file_path_as_absolute(images)
@@ -170,7 +179,7 @@ exam_scan <- function(exam, images, ...){
 
 #' Step 5: Evaluate the exam
 #'
-#' @param exam character. path to saved RDS file.
+#' @param exam short name, directory contains config.rds, created with \code{exam}
 #' @param flavor character. User nops_eval_write_<flavor>
 #' @param report.template character. Passed on to nops_eval_write_<flavor>
 #'    as an argument to template paramter
@@ -189,39 +198,38 @@ exam_evaluate <-
            eval = exams::exams_eval(partial = FALSE, negative = FALSE),
            ...){
 
-  # Default parameters for nops_eval()
-  params <- list(...)
+    course <- course_check()
+    examdir <- file.path(course$nops_dir, exam)
+    exam <- readRDS(file.path(examdir, "config.rds"))
 
-  params$flavor = flavor
-  params$template = report.template
-  params$eval = eval
+    # Default parameters for nops_eval()
+    params <- list(...)
+
+    params$flavor = flavor
+    params$template = report.template
+    params$eval = eval
+
+    # destination directory
+    params$dir <- examdir
+
+    # Use global setting from course.yml
+    if (is.null(params$register)) params$register <- course$register
+
+    if (is.null(params$scans)){
+      params$scans <- file.path(examdir, paste0(exam$shortname, "_scan.zip"))
+    }
+    if (is.null(params$solutions)){
+      params$solutions <- file.path(examdir, paste0(exam$shortname, ".rds"))
+    }
+
+    ev <- do.call(exams::nops_eval, params)
 
 
-  # destination directory
-  out.dir <- dirname(tools::file_path_as_absolute(exam))
-  params$dir <- out.dir
+    ## Omit this when the bug in nops_eval is fixed.
+    for (file in c("nops_eval.csv", "nops_eval.zip")){
+      file.copy(file, file.path(examdir, file), overwrite = TRUE)
+      unlink(file)
+    }
 
-  exam <- readRDS(exam)
-  course <- exam$course
-
-  # Use global setting from course.yml
-  if (is.null(params$register)) params$register <- course$register
-
-  if (is.null(params$scans)){
-    params$scans <- file.path(out.dir, paste0(exam$shortname, "_scan.zip"))
-  }
-  if (is.null(params$solutions)){
-    params$solutions <- file.path(out.dir, paste0(exam$shortname, ".rds"))
-  }
-
-  ev <- do.call(exams::nops_eval, params)
-
-
-  ## Omit this when the bug in nops_eval is fixed.
-  for (file in c("nops_eval.csv", "nops_eval.zip")){
-    file.copy(file, file.path(out.dir, file), overwrite = TRUE)
-    unlink(file)
-  }
-
-  ev
+    ev
 }

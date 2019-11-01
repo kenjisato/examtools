@@ -10,7 +10,7 @@ exam_evaluate(exam, flavor = "examtools",
   FALSE), ...)
 }
 \arguments{
-\item{exam}{character. path to saved RDS file.}
+\item{exam}{short name, directory contains config.rds, created with \code{exam}}
 
 \item{flavor}{character. User nops_eval_write_<flavor>}
 

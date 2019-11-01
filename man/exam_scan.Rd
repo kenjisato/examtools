@@ -7,7 +7,7 @@
 exam_scan(exam, images, ...)
 }
 \arguments{
-\item{exam}{character. path to saved RDS file.}
+\item{exam}{short name, directory contains config.rds, created with \code{exam}}
 
 \item{images}{scanned images (PNG's or PDF file)}
 
