@@ -1,8 +1,16 @@
-merge_moodle <- function(ev, ws) {
+merge_moodle <- function(ws, ev, reg) {
   # default merge function
+  # It is assumed that id column of register.csv corresponds
+  # to email address of worksheet.
+  ws_names <- names(ws)
+
+  merged_df <- merge(ws, ev, by = "id", sort = FALSE)
+  merged_df[["Grade"]] <- merged_df[["points"]]
+  merged_df
 }
 
-merge_moodle_opu <- function(ev, ws){
+
+merge_moodle_opu <- function(ws, ev, reg){
   # Remove prefix from submission ID column -> sid
   ws_names <- names(ws)
   ws$sid <- sub("^[^0-9]*([0-9]+)$", "\\1", ws[[1]])
@@ -25,6 +33,7 @@ merge_moodle_opu <- function(ev, ws){
 #' @param nops_zip character. Path to nops_eval.zip, output of nops_eval()
 #' @param worksheet_csv character. Path to Moodle's grading worksheet.
 #' @param merge closure. Function to merge nops_eval.csv and worksheet_csv
+#' @param register character. Path to register.csv
 #' @param nops_csv character. Path to nops_eval.csv, output of nops_eval().
 #'                 If NULL, it is guessed from the argument to nop_zip.
 #' @param suffix character. Suffix for output zip file.
@@ -38,6 +47,7 @@ merge_moodle_opu <- function(ev, ws){
 rewrite_for_moodle <- function(nops_zip,
                                worksheet_csv,
                                merge,
+                               register = NULL,
                                nops_csv = NULL,
                                suffix = "-moodle",
                                pattern = "%s_%s_assignsubmission_file_",
@@ -53,7 +63,7 @@ rewrite_for_moodle <- function(nops_zip,
   worksheet <- read.csv(worksheet_csv, fileEncoding = "UTF-8",
                         stringsAsFactors = FALSE, check.names = FALSE)
   worksheet_names <- names(worksheet)
-  merged_df <- merge(nops_eval, worksheet)
+  merged_df <- merge(worksheet, nops_eval, register)
   merged_df$dir_name <- sprintf(pattern,
                                 merged_df[[worksheet_names[[2]]]],
                                 merged_df$sid)
