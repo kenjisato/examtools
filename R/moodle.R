@@ -2,8 +2,8 @@ merge_moodle <- function(ws, ev, reg) {
   # default merge function
   # It is assumed that id column of register.csv corresponds
   # to email address of worksheet.
-  ws_names <- names(ws)
-
+  ws$sid <- sub("^[^0-9]*([0-9]+)$", "\\1", ws[[1]])
+  ws["id"] <- ws["Email address"]
   merged_df <- merge(ws, ev, by = "id", sort = FALSE)
   merged_df[["Grade"]] <- merged_df[["points"]]
   merged_df
@@ -81,7 +81,7 @@ rewrite_for_moodle <- function(nops_zip,
   dirs <- list.files(temp_dir, full.names = TRUE)
   for (d in dirs) {
     student_dir <- basename(d)
-    new_dir_name <- merged_df$dir_name[merged_df$registration == student_dir]
+    new_dir_name <- merged_df$dir_name[merged_df$id == student_dir]
     if (length(new_dir_name) > 0){
       file.rename(d, file.path(temp_dir, new_dir_name))
     } else {
