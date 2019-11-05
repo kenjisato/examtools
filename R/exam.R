@@ -14,7 +14,8 @@
 exam <- function(problems, date, name, shortname = date,
                  versions = 1L, samples.from.group = NULL) {
   course <- course_check()
-  out.dir <- file.path(course$nops_dir, exam$shortname)
+  examdir <- file.path(course$nops_dir, shortname)
+  dir.create(examdir)
 
   ex <- list(problems = problems,
              date = date,
@@ -25,7 +26,7 @@ exam <- function(problems, date, name, shortname = date,
              course = course)
 
   # Save Exam Information
-  saveRDS(ex, file.path(out.dir, "config.rds"))
+  saveRDS(ex, file.path(examdir, "config.rds"))
 }
 
 
@@ -71,9 +72,6 @@ exam_create <- function(exam,
   shortname <- exam$shortname
   shortname.dash <- paste0(shortname, "-")
 
-  # targetdir
-  out.dir <- file.path(getwd(), course$nops_dir, exam$date)
-
   # Number of problem patterns
   n <- exam$versions
   nsamp <- exam$samples.from.group
@@ -86,7 +84,7 @@ exam_create <- function(exam,
   if (is.null(html.template)) {
     html.template <- system.file("xml", "plain.html", package = "examtools")
   }
-  exams::exams2html(exam$problems, n = n, nsamp = nsamp, dir = out.dir,
+  exams::exams2html(exam$problems, n = n, nsamp = nsamp, dir = examdir,
                     name = shortname.dash, solution = FALSE,
                     mathjax = TRUE, template = html.template)
 
@@ -98,9 +96,9 @@ exam_create <- function(exam,
     }
     for (i in seq_len(n)){
       encrypted <- clientsideHtmlProtect::protect(
-        file.path(out.dir, paste0(shortname.dash, i, ".html")),
+        file.path(examdir, paste0(shortname.dash, i, ".html")),
         passphrase = passphrase)
-      writeLines(encrypted, file.path(out.dir, paste0(shortname.dash, i, "-protected.html")))
+      writeLines(encrypted, file.path(examdir, paste0(shortname.dash, i, "-protected.html")))
     }
   }
 
@@ -111,7 +109,7 @@ exam_create <- function(exam,
     exam$problems,
     n = n,
     nsamp = nsamp,
-    dir = out.dir,
+    dir = examdir,
     name = shortname.dash,
     language = course$language,
     institution = if (course.as.pdf.title) course$course else course$institution,
@@ -130,7 +128,7 @@ exam_create <- function(exam,
     exam$problems,
     n = n,
     nsamp = nsamp,
-    dir = out.dir,
+    dir = examdir,
     template = solution.template,
     header = list(Date = exam$date),
     name = paste0(shortname.dash, "solution"),
@@ -138,8 +136,8 @@ exam_create <- function(exam,
   )
 
   # Rename metafile
-  file.rename(file.path(out.dir, paste0(shortname.dash, ".rds")),
-              file.path(out.dir, paste0(shortname, ".rds")))
+  file.rename(file.path(examdir, paste0(shortname.dash, ".rds")),
+              file.path(examdir, paste0(shortname, ".rds")))
 }
 
 # Step 2: Print
