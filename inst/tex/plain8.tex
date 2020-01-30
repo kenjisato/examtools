@@ -1,0 +1,30 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[whole]{bxcjkjatype}
+
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide,color,Sweave,url,amsmath,booktabs,longtable,eurosym}
+\newenvironment{question}{\item }{}
+
+\newenvironment{solution}{}{}
+\newenvironment{answerlist}{\renewcommand{\labelenumi}{(\alph{enumi})}\begin{enumerate}}{\end{enumerate}}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\usepackage{environ}
+\NewEnviron{hide}{}
+\let\solution\hide
+\let\endsolution\endhide
+
+\setkeys{Gin}{keepaspectratio}
+
+
+\newcommand{\ID}[1]{\def\@ID{#1}}
+
+\begin{document}
+
+%% \exinput{id}
+\ID
+
+\begin{enumerate}
+%% \exinput{exercises}
+\end{enumerate}
+\end{document}

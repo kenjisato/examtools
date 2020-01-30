@@ -20,8 +20,8 @@ Imports:
     DT,
     png,
     yaml
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Suggests: 
     clientsideHtmlProtect (>= 0.0.0.9000)
-Remotes:  
+Remotes: 
     kenjisato/clientsideHtmlProtect
