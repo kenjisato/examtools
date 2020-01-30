@@ -4,9 +4,15 @@
 \alias{exam_create}
 \title{Step 1: Create NOPS written exam}
 \usage{
-exam_create(exam, latex.cover = NULL, html.template = NULL,
-  solution.template = NULL, encryptHTML = FALSE,
-  course.as.pdf.title = TRUE, ...)
+exam_create(
+  exam,
+  latex.cover = NULL,
+  html.template = NULL,
+  solution.template = NULL,
+  encryptHTML = FALSE,
+  course.as.pdf.title = TRUE,
+  ...
+)
 }
 \arguments{
 \item{exam}{exam short name, directory contains config.rds, created with \code{exam}}

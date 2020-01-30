@@ -4,10 +4,10 @@
 \alias{exam_scan}
 \title{Step 4: Scan exam sheets}
 \usage{
-exam_scan(exam, images, ...)
+exam_scan(shortname, images, ...)
 }
 \arguments{
-\item{exam}{short name, directory contains config.rds, created with \code{exam}}
+\item{shortname}{short name, directory contains config.rds, created with \code{exam}}
 
 \item{images}{scanned images (PNG's or PDF file)}
 

@@ -4,13 +4,16 @@
 \alias{exam_evaluate}
 \title{Step 5: Evaluate the exam}
 \usage{
-exam_evaluate(exam, flavor = "examtools",
-  report.template = system.file("xml", "report.html", package =
-  "examtools"), eval = exams::exams_eval(partial = FALSE, negative =
-  FALSE), ...)
+exam_evaluate(
+  shortname,
+  flavor = "template",
+  report.template = system.file("nops", "eval.html", package = "exams"),
+  eval = exams::exams_eval(partial = FALSE, negative = FALSE),
+  ...
+)
 }
 \arguments{
-\item{exam}{short name, directory contains config.rds, created with \code{exam}}
+\item{shortname}{short name, directory contains config.rds, created with \code{exam}}
 
 \item{flavor}{character. User nops_eval_write_<flavor>}
 

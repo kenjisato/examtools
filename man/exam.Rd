@@ -4,8 +4,14 @@
 \alias{exam}
 \title{Step 0: Set up one exam.}
 \usage{
-exam(problems, date, name, shortname = date, versions = 1L,
-  samples.from.group = NULL)
+exam(
+  problems,
+  date,
+  name,
+  shortname = date,
+  versions = 1L,
+  samples.from.group = NULL
+)
 }
 \arguments{
 \item{problems}{list of problems.}
