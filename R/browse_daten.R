@@ -6,14 +6,19 @@
 #' @param width integer. Width of the dialog viewer.
 #' @param height integer. Width of the dialog viewer.
 #' @param n integer. Number of problems.
+#' @param downsample integer. Image downsampling factor.
+#' @param nalt integer. Maximum number of alternatives.
+#'
 #' @export
 #'
 #' @importFrom utils read.delim
 #' @import shiny
 #' @import miniUI
-check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 45) {
-  daten <- read.delim(file.path(dir, file),
-                      sep = " ", header = FALSE, colClasses = "character")
+check_daten <- function(dir, file = "Daten.txt", width = 800L, height = 600L, n = 45L,
+                        downsample = 4L, nalt = 5L) {
+  daten0 <- read.delim(file.path(dir, file),
+                       sep = " ", header = FALSE, colClasses = "character")
+  daten <- daten0
   image.path <- file.path(dir, daten[[1]])
 
   COLNUM <- c(exam = 2, type = 4, registration = 6, info.end = 6)
@@ -71,11 +76,21 @@ check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 
     # checkbox generation
     output$chkbox_ui <- renderUI({
       chkbox_list <- list()
-      for (i in 1:n) {
-        chkbox_list[[i]] <- checkboxGroupInput(
-          inputId = paste0("prb.", i),
-          label = formatC(i, width = 2, flag = "0"),
-          choices = letters[1:5],
+      cnt <- 0
+      prb_i <- 0
+      while (prb_i < n) {
+        cnt <- cnt + 1
+        prb_i <- prb_i + 1
+
+        if (prb_i != 1 && prb_i %% 5 == 1) {
+          chkbox_list[[cnt]] <- if (prb_i %% 15 == 1) hr() else br()
+          cnt <- cnt + 1
+        }
+
+        chkbox_list[[cnt]] <- checkboxGroupInput(
+          inputId = paste0("prb.", prb_i),
+          label = formatC(prb_i, width = 2, flag = "0"),
+          choices = letters[1:nalt],
           inline = TRUE
         )
       }
@@ -87,6 +102,7 @@ check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 
       showImage <- function(i) {
         output$png <- renderPlot({
           img <- png::readPNG(image.path[[i]])
+          img <- img[seq(200, 3250, downsample), seq(270, 2210, downsample), ]
           grid::grid.raster(img)
         })
         output$imageName <- renderText(daten[[i, 1]])
@@ -119,7 +135,16 @@ check_daten <- function(dir, file = "Daten.txt", width = 800, height = 600, n = 
     refresh(currentIndex)
 
     # Event handlers
-    observeEvent(input$done, stopApp(daten))
+    observeEvent(input$done, {
+      updated <- daten[apply(daten != daten0, 1, any), ]
+      if (nrow(updated) > 0) {
+        message("Updated records: \n")
+        print(updated)
+        message("\nUpdate Daten.txt with ", "\n",
+                "write.table(.Last.value, file, row.names = FALSE, col.names = FALSE, sep = ' ', quote = FALSE)", "\n")
+      }
+      stopApp(invisible(daten))
+    })
     observeEvent(input$abort, stopApp(invisible()))
 
     for (id in c("registration", "exam", "type")) {

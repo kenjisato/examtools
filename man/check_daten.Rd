@@ -4,8 +4,15 @@
 \alias{check_daten}
 \title{A shiny gadget to check and fix Daten.txt}
 \usage{
-check_daten(dir, file = "Daten.txt", width = 800, height = 600,
-  n = 45)
+check_daten(
+  dir,
+  file = "Daten.txt",
+  width = 800L,
+  height = 600L,
+  n = 45L,
+  downsample = 4L,
+  nalt = 5L
+)
 }
 \arguments{
 \item{dir}{character. Path to nops_scan (uncompressed directory)}
@@ -17,6 +24,10 @@ check_daten(dir, file = "Daten.txt", width = 800, height = 600,
 \item{height}{integer. Width of the dialog viewer.}
 
 \item{n}{integer. Number of problems.}
+
+\item{downsample}{integer. Image downsampling factor.}
+
+\item{nalt}{integer. Maximum number of alternatives.}
 }
 \description{
 A shiny gadget to check and fix Daten.txt
