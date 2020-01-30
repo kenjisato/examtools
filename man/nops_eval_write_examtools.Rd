@@ -4,8 +4,12 @@
 \alias{nops_eval_write_examtools}
 \title{Customized nops_eval_write for examtools}
 \usage{
-nops_eval_write_examtools(results = "nops_eval.csv",
-  name = "report.html", template = NULL, ...)
+nops_eval_write_examtools(
+  results = "nops_eval.csv",
+  name = "report.html",
+  template = NULL,
+  ...
+)
 }
 \arguments{
 \item{results}{character or data.frame. Path to nops_eval.csv.}

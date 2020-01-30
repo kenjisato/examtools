@@ -35,7 +35,7 @@ merge_moodle_opu <- function(ws, ev, reg){
 #' @param merge closure. Function to merge nops_eval.csv and worksheet_csv
 #' @param register character. Path to register.csv
 #' @param nops_csv character. Path to nops_eval.csv, output of nops_eval().
-#'                 If NULL, it is guessed from the argument to nop_zip.
+#'                 If NULL, it is guessed from the argument to nops_zip.
 #' @param suffix character. Suffix for output zip file.
 #' @param pattern character. Pattern for output directory names.
 #' @param quote logical, passed to write.csv
@@ -53,6 +53,7 @@ rewrite_for_moodle <- function(nops_zip,
                                pattern = "%s_%s_assignsubmission_file_",
                                quote = TRUE) {
 
+  nops_zip <- tools::file_path_as_absolute(nops_zip)
   name <- tools::file_path_sans_ext(nops_zip)
   if (is.null(nops_csv)) {
     nops_csv <- paste0(name, ".csv")
