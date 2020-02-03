@@ -1,4 +1,12 @@
 
+#' Include image not produced by R
+#'
+#' @param image_file character. image file name. Typically, PNG or SVG
+#' @param md_opts list. list of \code{alt} and \code{width}. Used as ![alt](image_file){width=width}
+#' @param latex_opts list. list of parameters passed to \\includegraphics[]{image_file}
+#'
+#' @return LaTeX/Markdown code embedded in Rmd/Rnw file.
+#' @export
 include_graphics <- function(image_file, md_opts = NULL, latex_opts = NULL) {
 
   sys_call <- sys.calls()
