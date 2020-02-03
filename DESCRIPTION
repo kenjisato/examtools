@@ -1,7 +1,7 @@
 Package: examtools
 Type: Package
 Title: Helper Tools for exams Package
-Version: 0.0.0.9007
+Version: 0.0.0.9008
 Author: Kenji Sato
 Maintainer: Kenji Sato <mail@kenjisato.jp>
 Description: This package collects tools to extend exams package.
@@ -9,6 +9,7 @@ Description: This package collects tools to extend exams package.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 3.2.0)
 Imports: 
     zip,
     exams (>= 2.3-5),
